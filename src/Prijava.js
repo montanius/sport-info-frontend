@@ -16,10 +16,12 @@ const response = await fetch('http://localhost:4000/api/login', {
     headers : {"content-type" : "application/json"},
     body : JSON.stringify(formData),
 });
-const result = response.json();
+const result = await response.json();
 if(response.ok){
+console.log(result);
+localStorage.setItem("token", `Bearer ${result.token}`);
     alert(result.message || "Prijava  je uspješna.");
-}
+    }
 else{
     alert(result.message || "Došlo je do greške pri prijavi..");
 }
