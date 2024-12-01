@@ -18,13 +18,14 @@ function App() {
 {location.pathname === "/" && <Novosti />}
 
 <Routes> 
-<Route path='onama' element={<ONama />}> </Route>
-<Route path='Kontakt' element={<Kontakt />}> </Route>
-<Route path='Sportovi' element={<Sportovi />}> </Route>
-<Route path='klubovi' element={<Klubovi />}> </Route>
-<Route path='Sportisti' element={<Sportisti />}> </Route>
-<Route path='Registracija' element={<Registracija />}> </Route>
-<Route path='Prijava' element={<Prijava />}> </Route>
+  <Route path='/' element={<Novosti />} />
+<Route path='onama' element={<ONama />} /> 
+<Route path='kontakt' element={<Kontakt />} />
+<Route path='sportovi' element={<Sportovi />} />
+<Route path='klubovi' element={<Klubovi />} />
+<Route path='sportisti' element={<Sportisti />} />
+<Route path='registracija' element={<Registracija />} />
+<Route path='prijava' element={<Prijava />} />
       </Routes>
                              </div>
   );

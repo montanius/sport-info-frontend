@@ -6,8 +6,8 @@ function Registracija(){
         prezime:"",
         status:"",
         email:"",
-        lozinka:"" });
-
+        lozinka:"" 
+    });
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value});
     };
@@ -24,7 +24,7 @@ function Registracija(){
                        alert(result.message || "Registracija je uspješna.");
                     }
                     catch(error){
-                        console.error("Greška pri registraciji", error);
+                        console.log("Greška pri registraciji", error);
                         alert("Registracija nije uspjela.");
                     }
     };
@@ -46,7 +46,7 @@ function Registracija(){
 <option value="Sportski radnik"> Sportski radnik </option>
 </select>
 <label htmlFor="email"> Email </label>
-<input type="mail" name="email" id="email" placeholder="Unesite  vaš email:" required onChange={handleChange} />
+<input type="mail" name="email" id="email" placeholder="Unesite vaš email:" required onChange={handleChange} />
 <label htmlFor="lozinka"> Lozinka </label>
 <input type="text" name="lozinka" id="lozinka" placeholder="Unesite lozinku:" required onChange={handleChange} />
 <input type="submit" value="Registruj se" />
