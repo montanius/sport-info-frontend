@@ -9,7 +9,6 @@ import Sportisti from './Sportisti.js';
 import Registracija from './Registracija.js';
 import Prijava from './Prijava.js';
 import Profil from './Profil.js';
-
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
