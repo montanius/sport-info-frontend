@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import {validator, validacijaForme} from './utils/validation.js';
+import { useNavigate } from "react-router-dom";
+import fetchClijent from './utils/fetchClijent.js';
 
 function Registracija(){
     const [formData, setFormData] = useState({
@@ -11,7 +13,9 @@ function Registracija(){
     });
 
     const [errors, setErrors] = useState({});
-    
+
+    const navigate = useNavigate();
+
             const handleChange = (e) => {
           const {name, value} = e.target;
             setFormData({ ...formData, [name]: value});
@@ -36,13 +40,15 @@ fieldError = error;
         setErrors(newErrors);
         if(Object.keys(newErrors).length === 0){
                 try{
-            const response = await fetch('http://localhost:4000/api/register', {
-                method: "POST", 
-                headers: {"content-type": "application/json"}, 
-                    body:JSON.stringify(formData),
-                       });
-                       const result = await response.json();
+            
+            const response = await fetchClijent('http://localhost:4000/api/register', {
+                method : 'POST', 
+                body : JSON.stringify(formData),
+            });
+            
+                                           const result = await response.json();
                        alert(result.message || "Registracija je uspješna.");
+                       navigate('/prijava');
                     }
                     catch(error){
                         console.log("Greška pri registraciji", error);

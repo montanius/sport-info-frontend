@@ -1,44 +1,49 @@
 import React, {useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
+import fetchClijent from './utils/fetchClijent';
 
 function Profil (){
 const [korisnik, setKorisnik] = useState(null);
 const [errors, setErrors] = useState(null);
-const [isLoading, setIsLoading] = useState(true);
+const [isLoading, setIsLoading] = useState(false);
+const navigate = useNavigate();
+
+const fetchKorisnik = async () => {
+    const token = localStorage.getItem('token');
+    if(!token){
+    setErrors('Token nije pronađen.');
+        return;
+    }
+    try{
+        setIsLoading(true);
+
+        const response = await fetchClijent('http://localhost:4000/api/users/me', {
+            method : 'GET', 
+        });
+
+            if(response.ok){
+    const korisnikData = await response.json();
+        setKorisnik(korisnikData);
+        setIsLoading(false);
+    console.log(korisnikData);
+    }
+    else{
+    const errorData = await response.json();
+    setErrors('Došlo je do greške pri dohvaćanju podataka.');
+    setIsLoading(false);
+    navigate('/Prijava');
+    }
+    }
+    catch(err){
+    setErrors('Došlo je do greške u aplikaciji' + err.message);
+    }
+    finally{
+        setIsLoading(false);
+    }
+        };
 
 useEffect(() => {
-    const fetchKorisnik = async () => {
-const token = localStorage.getItem('token');
-if(!token){
-setErrors('Token nije pronađen.');
-setIsLoading(false);
-return;
-}
-try{
-const response = await fetch('http://localhost:4000/api/users/me', {
-    method : 'GET', 
-    headers : {
-        Authorization : token,
-        "content-type" : "application/json",
-            },
-});
-if(response.ok){
-const korisnikData = await response.json();
-setKorisnik(korisnikData);
-console.log(korisnikData);
-}
-else{
-const errorData = await response.json();
-setErrors('Došlo je do greške pri dohvaćanju podataka.');
-}
-}
-catch(err){
-setErrors('Došlo je do greške u aplikaciji' + err.message);
-}
-finally{
-    setIsLoading(false);
-}
-    };
-
+    console.log('useefect funkcija je pozvana');
     fetchKorisnik();
 }, []);
 
@@ -54,10 +59,22 @@ if(!korisnik){
 return <p> Nema podataka za učitavanje </p>
 }
 
-        /*fetch('http://localhost:4000/api/users', {
-        method: "GET",
-headers : {"content-type" :"application/json", authorization : localStorage.getItem("token")}
-    }).then(res => res.json()).then(users => console.log(users));*/
+            const logout = async () => {
+        const token = localStorage.getItem('token');
+        if(!token){
+return;
+        }
+
+        try{
+localStorage.removeItem('token');
+alert('Uspješno ste se odjavili');
+navigate('/');
+
+      }
+        catch(error){
+console.log(error);
+        }
+    };
 
 return(
     <div>
@@ -66,6 +83,7 @@ return(
 <p> <strong> Prezime: </strong>  {korisnik.prezime} </p>
 <p> <strong> Status: </strong>  {korisnik.status} </p>
 <p> <strong> Email: </strong>  {korisnik.email} </p>
+<button onClick={logout}> odjavi se </button>
 </div>
 );
 }

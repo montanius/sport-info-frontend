@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {validator, validacijaForme} from './utils/validation';
+import {checkLogedIn} from './utils/checkLogedIn';
+import fetchClijent from './utils/fetchClijent';
 
 function Prijava(){
     const [formData, setFormData] = useState({
@@ -35,14 +37,16 @@ const newErrors = validacijaForme(formData);
 setErrors(newErrors);
 if(Object.keys(newErrors).length === 0){
 try{
-const response = await fetch('http://localhost:4000/api/login', {
-    method : "POST",
-    headers : {"content-type" : "application/json"},
-    body : JSON.stringify(formData),
+
+const response = await fetchClijent('http://localhost:4000/api/login', {
+    method : 'POST',
+    body : JSON.stringify(formData), 
 });
-const result = await response.json();
+
+    const result = await response.json();
+
 if(response.ok){
-console.log(result);
+console.log(result.token);
 localStorage.setItem("token", `Bearer ${result.token}`);
     alert(result.message || "Prijava  je uspješna.");
     navigate('/Profil');
@@ -60,6 +64,10 @@ else{
     alert("Morate ispravno popuniti formu.");
 }
     };
+
+useEffect(() => {
+        checkLogedIn(navigate);
+}, [navigate]);
 
     return (
     <>
