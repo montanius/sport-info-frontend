@@ -9,6 +9,7 @@ import Sportisti from './Sportisti.js';
 import Registracija from './Registracija.js';
 import Prijava from './Prijava.js';
 import Profil from './Profil.js';
+import UpdateProfil from './UpdateProfil.js';
 import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
 <Route path='registracija' element={<Registracija />} />
 <Route path='prijava' element={<Prijava />} />
 <Route path='profil' element={<Profil />} />
+<Route path='updateprofil/:field' element={<UpdateProfil />} />
       </Routes>
                              </div>
   );

@@ -1,12 +1,18 @@
 import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import fetchClijent from './utils/fetchClijent';
+import {checkLogedOut} from './utils/checkLogedStatus';
 
 function Profil (){
 const [korisnik, setKorisnik] = useState(null);
 const [errors, setErrors] = useState(null);
 const [isLoading, setIsLoading] = useState(false);
 const navigate = useNavigate();
+
+useEffect(() => {
+    checkLogedOut(navigate);
+}, [navigate]);
 
 const fetchKorisnik = async () => {
     const token = localStorage.getItem('token');
@@ -76,12 +82,17 @@ console.log(error);
         }
     };
 
+    
+    
 return(
     <div>
 <h1> Dobro došli {korisnik.ime} {korisnik.prezime} </h1>
 <p> <strong> Ime: </strong>  {korisnik.ime} </p>
+<Link to='/updateProfil/ime'> Promijeni ime </Link>
 <p> <strong> Prezime: </strong>  {korisnik.prezime} </p>
+<Link to='/updateProfil/prezime'> Promijeni prezime</Link>
 <p> <strong> Status: </strong>  {korisnik.status} </p>
+<Link to='/updateProfil/status'> Promijeni status </Link>
 <p> <strong> Email: </strong>  {korisnik.email} </p>
 <button onClick={logout}> odjavi se </button>
 </div>

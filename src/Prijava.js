@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {validator, validacijaForme} from './utils/validation';
-import {checkLogedIn} from './utils/checkLogedIn';
+import {checkLogedIn} from './utils/checkLogedStatus';
 import fetchClijent from './utils/fetchClijent';
 
 function Prijava(){
