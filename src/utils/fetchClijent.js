@@ -8,8 +8,16 @@ const headers = {
     };
 
             const response = await fetch(url, {...options, headers});
+            if(response.ok){
+                return response;
+            }
+            else{
+                throw new Error(`Response status: ${response.status}`);
+            }
+            
         
-    return response;
+
+    
          };
 
  export default fetchClijent;

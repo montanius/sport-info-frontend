@@ -25,9 +25,9 @@ const  getData = async () => {
     setKorisnik(korisnikData);
 }
 catch(error){
-loger.error("Došlo je do greške u preuzimanju poddataka o korisniku.", error.message);
+loger.error(logerContext, "Provjeravam grešku: Došlo je do greške u preuzimanju poddataka o korisniku.", error.message);
 setErrors(error.message);
-navigate('/prijava');
+//navigate('/prijava');
 }
 finally{
     setIsLoading(false);
