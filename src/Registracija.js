@@ -13,7 +13,6 @@ function Registracija(){
     });
 
     const [errors, setErrors] = useState({});
-
     const navigate = useNavigate();
 
             const handleChange = (e) => {

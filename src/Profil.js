@@ -3,55 +3,39 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import fetchClijent from './utils/fetchClijent';
 import {checkLogedOut} from './utils/checkLogedStatus';
+import fetchKorisnik from './utils/fetchKorisnik';
+import loger from './utils/loger';
 
 function Profil (){
 const [korisnik, setKorisnik] = useState(null);
 const [errors, setErrors] = useState(null);
 const [isLoading, setIsLoading] = useState(false);
 const navigate = useNavigate();
-
+const logerContext = "Profil komponenta.";
 useEffect(() => {
     checkLogedOut(navigate);
 }, [navigate]);
 
-const fetchKorisnik = async () => {
-    const token = localStorage.getItem('token');
-    if(!token){
-    setErrors('Token nije pronađen.');
-        return;
-    }
-    try{
-        setIsLoading(true);
-
-        const response = await fetchClijent('http://localhost:4000/api/users/me', {
-            method : 'GET', 
-        });
-
-            if(response.ok){
-    const korisnikData = await response.json();
-        setKorisnik(korisnikData);
-        setIsLoading(false);
-    console.log(korisnikData);
-    }
-    else{
-    const errorData = await response.json();
-    setErrors('Došlo je do greške pri dohvaćanju podataka.');
-    setIsLoading(false);
-    navigate('/Prijava');
-    }
-    }
-    catch(err){
-    setErrors('Došlo je do greške u aplikaciji' + err.message);
-    }
-    finally{
-        setIsLoading(false);
-    }
-        };
-
 useEffect(() => {
-    console.log('useefect funkcija je pozvana');
-    fetchKorisnik();
+const  getData = async () => {
+    setIsLoading(true);
+
+    try{
+    const korisnikData = await fetchKorisnik();
+    setKorisnik(korisnikData);
+}
+catch(error){
+loger.error("Došlo je do greške u preuzimanju poddataka o korisniku.", error.message);
+setErrors(error.message);
+navigate('/prijava');
+}
+finally{
+    setIsLoading(false);
+}
+    }        
+    getData();
 }, []);
+
 
 if(isLoading){
 return <p> Učitavanje podataka... </p>
@@ -78,7 +62,7 @@ navigate('/');
 
       }
         catch(error){
-console.log(error);
+loger.log(error);
         }
     };
 
@@ -88,12 +72,10 @@ return(
     <div>
 <h1> Dobro došli {korisnik.ime} {korisnik.prezime} </h1>
 <p> <strong> Ime: </strong>  {korisnik.ime} </p>
-<Link to='/updateProfil/ime'> Promijeni ime </Link>
 <p> <strong> Prezime: </strong>  {korisnik.prezime} </p>
-<Link to='/updateProfil/prezime'> Promijeni prezime</Link>
 <p> <strong> Status: </strong>  {korisnik.status} </p>
-<Link to='/updateProfil/status'> Promijeni status </Link>
 <p> <strong> Email: </strong>  {korisnik.email} </p>
+<Link to='/updateProfil'> Izmijeni podatke o korisniku </Link>
 <button onClick={logout}> odjavi se </button>
 </div>
 );

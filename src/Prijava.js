@@ -3,16 +3,18 @@ import { useNavigate } from "react-router-dom";
 import {validator, validacijaForme} from './utils/validation';
 import {checkLogedIn} from './utils/checkLogedStatus';
 import fetchClijent from './utils/fetchClijent';
+import loger from './utils/loger';
 
 function Prijava(){
-    const [formData, setFormData] = useState({
+        const [formData, setFormData] = useState({
         email : "",
         lozinka : "",
     });
 
     const [errors, setErrors] = useState({});
-
     const navigate = useNavigate();
+    const logerContext = "Prijava komponenta.";
+
     const handleChange = (e) => {
         const {name, value} = e.target;
         setFormData({ ...formData, [name] : value});
@@ -46,17 +48,18 @@ const response = await fetchClijent('http://localhost:4000/api/login', {
     const result = await response.json();
 
 if(response.ok){
-console.log(result.token);
+loger.log(logerContext, "Uspješno pronađen token.");
 localStorage.setItem("token", `Bearer ${result.token}`);
     alert(result.message || "Prijava  je uspješna.");
     navigate('/Profil');
     }
 else{
+    loger.log(logerContext, "Imaš grešku  pri prijavi");
     alert(result.message || "Došlo je do greške pri prijavi..");
 }
 }
 catch(error){
-console.log("Greška  pri prijavi:", error);
+loger.log(logerContext, "Greška  pri prijavi:", error);
 alert("Prijava nije uspjela.");
 }
 }

@@ -1,18 +1,18 @@
 import './App.css';
-import NavBar from'./NavBar.js';
-import ONama from './ONama.js';
-import Kontakt from "./Kontakt.js";
-import Novosti from'./Novosti.js';
-import Sportovi from './Sportovi.js';
-import Klubovi from './Klubovi.js';
-import Sportisti from './Sportisti.js';
-import Registracija from './Registracija.js';
-import Prijava from './Prijava.js';
-import Profil from './Profil.js';
-import UpdateProfil from './UpdateProfil.js';
+import NavBar from'./NavBar';
+import ONama from './ONama';
+import Kontakt from "./Kontakt";
+import Novosti from'./Novosti';
+import Sportovi from './Sportovi';
+import Klubovi from './Klubovi';
+import Sportisti from './Sportisti';
+import Registracija from './Registracija';
+import Prijava from './Prijava';
+import Profil from './Profil';
+import UpdateProfil from './UpdateProfil';
 import { Route, Routes, useLocation } from "react-router-dom";
 
-function App() {
+function App () {
   const location = useLocation();
   return (
     <div className="App">
@@ -29,7 +29,7 @@ function App() {
 <Route path='registracija' element={<Registracija />} />
 <Route path='prijava' element={<Prijava />} />
 <Route path='profil' element={<Profil />} />
-<Route path='updateprofil/:field' element={<UpdateProfil />} />
+<Route path='updateprofil' element={<UpdateProfil />} />
       </Routes>
                              </div>
   );
