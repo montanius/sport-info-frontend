@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {validator, validacijaForme} from './utils/validation.js';
 import { useNavigate } from "react-router-dom";
 import fetchClijent from './utils/fetchClijent.js';
+import loger from './utils/loger.js';
 
 function Registracija(){
     const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ function Registracija(){
 
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+    const logerContext = "Registracija komponenta";
 
             const handleChange = (e) => {
           const {name, value} = e.target;
@@ -35,6 +37,7 @@ fieldError = error;
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+
         const newErrors = validacijaForme(formData);
         setErrors(newErrors);
         if(Object.keys(newErrors).length === 0){
@@ -50,7 +53,7 @@ fieldError = error;
                        navigate('/prijava');
                     }
                     catch(error){
-                        console.log("Greška pri registraciji", error);
+             loger.error(logerContext, error.message);
                         alert("Registracija nije uspjela.");
                     }
                                     }

@@ -5,6 +5,7 @@ import fetchClijent from './utils/fetchClijent';
 import {checkLogedOut} from './utils/checkLogedStatus';
 import fetchKorisnik from './utils/fetchKorisnik';
 import loger from './utils/loger';
+import token from './utils/token';
 
 function Profil (){
 const [korisnik, setKorisnik] = useState(null);
@@ -12,14 +13,13 @@ const [errors, setErrors] = useState(null);
 const [isLoading, setIsLoading] = useState(false);
 const navigate = useNavigate();
 const logerContext = "Profil komponenta.";
-useEffect(() => {
-    checkLogedOut(navigate);
-}, [navigate]);
 
 useEffect(() => {
 const  getData = async () => {
-    setIsLoading(true);
-
+        const isLogedOut = await checkLogedOut(navigate);
+    if(isLogedOut) return;
+                    
+           setIsLoading(true);
     try{
     const korisnikData = await fetchKorisnik();
     setKorisnik(korisnikData);
@@ -27,7 +27,6 @@ const  getData = async () => {
 catch(error){
 loger.error(logerContext, "Provjeravam grešku: Došlo je do greške u preuzimanju poddataka o korisniku.", error.message);
 setErrors(error.message);
-//navigate('/prijava');
 }
 finally{
     setIsLoading(false);
@@ -35,7 +34,6 @@ finally{
     }        
     getData();
 }, []);
-
 
 if(isLoading){
 return <p> Učitavanje podataka... </p>
@@ -50,24 +48,21 @@ return <p> Nema podataka za učitavanje </p>
 }
 
             const logout = async () => {
-        const token = localStorage.getItem('token');
-        if(!token){
+        //const token = localStorage.getItem('token');
+        if(!token.get()){
 return;
         }
 
         try{
-localStorage.removeItem('token');
+token.remove();
 alert('Uspješno ste se odjavili');
 navigate('/');
-
       }
         catch(error){
 loger.log(error);
         }
     };
-
-    
-    
+        
 return(
     <div>
 <h1> Dobro došli {korisnik.ime} {korisnik.prezime} </h1>
@@ -76,6 +71,7 @@ return(
 <p> <strong> Status: </strong>  {korisnik.status} </p>
 <p> <strong> Email: </strong>  {korisnik.email} </p>
 <Link to='/updateProfil'> Izmijeni podatke o korisniku </Link>
+<Link to='/addSport'> Dodaj sport  </Link>
 <button onClick={logout}> odjavi se </button>
 </div>
 );

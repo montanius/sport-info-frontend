@@ -1,8 +1,9 @@
 import fetchClijent from './fetchClijent';
+import token from './token';
+import loger from './loger';
 
 export const checkLogedIn = async (navigate) => {
-    const token = localStorage.getItem('token');
-    if(token){
+      if(token.get){
         try{
 const response = await fetchClijent('http://localhost:4000/api/users/me', {
     Method : 'GET',
@@ -13,14 +14,15 @@ if(response.ok){
 }
 }
 catch(error){
-console.log('Korisnik nije ulogovan', error);
+loger.log('Korisnik nije ulogovan', error);
 }
     }
 };
 
 export const checkLogedOut = async (navigate) => {
-    const token = localStorage.getItem('token');
-    if(!token){
+if(!token.get()){
 navigate('/prijava');
+return true;
     }
+    return false;
 };

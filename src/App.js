@@ -10,9 +10,11 @@ import Registracija from './Registracija';
 import Prijava from './Prijava';
 import Profil from './Profil';
 import UpdateProfil from './UpdateProfil';
+import AddSport from './AddSport';
 import { Route, Routes, useLocation } from "react-router-dom";
+import React from 'react';
 
-function App () {
+function App()  {
   const location = useLocation();
   return (
     <div className="App">
@@ -30,6 +32,7 @@ function App () {
 <Route path='prijava' element={<Prijava />} />
 <Route path='profil' element={<Profil />} />
 <Route path='updateprofil' element={<UpdateProfil />} />
+<Route path='addSport' element={<AddSport />} />
       </Routes>
                              </div>
   );

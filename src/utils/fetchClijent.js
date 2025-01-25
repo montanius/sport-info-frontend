@@ -12,12 +12,9 @@ const headers = {
                 return response;
             }
             else{
-                throw new Error(`Response status: ${response.status}`);
+                const error = await response.json();
+                throw new Error(`${error.message}`);
             }
-            
-        
-
-    
          };
 
  export default fetchClijent;

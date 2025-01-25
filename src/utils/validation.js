@@ -4,7 +4,7 @@ return regexNijePrazno.test(text);
 }
 
 export function validirajImePrezime  (Text) {
-    const regexValidirajImePrezime = /^[\p{L}'-]+$/u;
+    const regexValidirajImePrezime = /^[\p{L}'\- ]+$/u;
     return regexValidirajImePrezime.test(Text);
 };
 

@@ -4,6 +4,7 @@ import {validator, validacijaForme} from './utils/validation';
 import {checkLogedIn} from './utils/checkLogedStatus';
 import fetchClijent from './utils/fetchClijent';
 import loger from './utils/loger';
+import token from './utils/token';
 
 function Prijava(){
         const [formData, setFormData] = useState({
@@ -39,7 +40,6 @@ const newErrors = validacijaForme(formData);
 setErrors(newErrors);
 if(Object.keys(newErrors).length === 0){
 try{
-
 const response = await fetchClijent('http://localhost:4000/api/login', {
     method : 'POST',
     body : JSON.stringify(formData), 
@@ -49,8 +49,8 @@ const response = await fetchClijent('http://localhost:4000/api/login', {
 
 if(response.ok){
 loger.log(logerContext, "Uspješno pronađen token.");
-localStorage.setItem("token", `Bearer ${result.token}`);
-    alert(result.message || "Prijava  je uspješna.");
+token.set(result.token);
+   alert(result.message || "Prijava  je uspješna.");
     navigate('/Profil');
     }
 else{

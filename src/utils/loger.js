@@ -5,7 +5,7 @@ export class Loger {
             };
 
     error (context, message) {
-        console.log("loger: " ,"context: ",  context,  message);
+        console.error("context: ", context, "loger: ", message);
     };
    ;
 }

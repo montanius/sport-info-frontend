@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import react, { useState, useEffect } from "react";
 import {fetchClijent} from './utils/fetchClijent';
 import fetchKorisnik from './utils/fetchKorisnik';
 import { useNavigate } from "react-router-dom";
 import { checkLogedOut } from "./utils/checkLogedStatus";
 import {validacijaForme, validator} from './utils/validation';
 import loger from "./utils/loger";
+
 
 function UpdateProfil (){
     const [formData, setFormData] = useState({
@@ -18,18 +19,16 @@ const navigate = useNavigate();
 const statusOpcije = ["Administrator kluba", "Sportista", "Trener", "Sportski radnik"];
 
 useEffect(() => {
-    checkLogedOut(navigate);
-}, [navigate]);
-
-useEffect(() => {
     const getData = async () => {
+        const isLogedOut = await checkLogedOut(navigate);
+        if(isLogedOut) return;
+
 try{
-        const korisnikData = await fetchKorisnik();
+            const korisnikData = await fetchKorisnik();
         setFormData(korisnikData);
     }
     catch(error){
 loger.error("Došlo je do  greške pri dobijanju podataka o korisniku", error.message);
-navigate('/prijava');
     }
     }
     getData();
