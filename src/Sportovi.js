@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from "react";
 import Novosti from './Novosti';
-import fetchClijent from './utils/fetchClijent';
 import loger from './utils/loger';
 
 function Sportovi (){
@@ -13,10 +12,15 @@ const logerContext = "Komponenta sportovi";
 useEffect(() => {
     const fetchSports = async () => {
 try{
-const response = await fetchClijent('http://localhost:4000/api/sports', {
-method : 'GET'
-});
+const response = await fetch('http://localhost:4000/api/sports', {
+method : 'GET',
+headers : {
+"Content-Type" : 'application/json'
+}});
 
+if(!response.ok){
+console.log(`error ${response.status} ${response.statusText}`);
+}
 const sports = await response.json();
 setSports(sports);
 }
@@ -45,17 +49,32 @@ setFilterActive(true);
 
 {filterActive && (
     <>
-<ul>
+<table>
+    <thead>
+<tr>
+<th> Ime sporta  </th>
+<th> Vrsta sporta  </th>
+<th> Discipline </th>
+<th> Kategorije  </th>
+</tr>
+</thead>
+<tbody>
 {filteredSports.length > 0 ? (
 filteredSports.map(( sport) => (
-<li key={sport._id}> 
-                        <p> {sport.name} </p>
-                        <p> {sport.type}    </p>
-                        </li>
-                                                ))) : (
-<p> Nema sportova sa odabranim statusom. </p>
+                        <tr key={sport._id}>
+                        <td> {sport.name} </td>
+                        <td> {sport.type}    </td>
+                        <td> {Array.isArray(sport.discipline) ? sport.discipline.join(", ") : ""} </td>
+                        <td> {Array.isArray(sport.kategorije) ? sport.kategorije.join(", ") : ""} </td>
+                        </tr>
+                                                                        ))) : (
+<tr>
+<td colSpan="4"> Nema sportova sa odabranim statusom. </td>
+</tr>
 )}
-</ul>
+</tbody>
+                                                </table>
+                                                                     : 
 <button onClick={() => setFilterActive(false)}> Nazad </button>
 </>
 )}
