@@ -3,7 +3,7 @@
 ## Plan razvoja aplikacije
 
 1. Prelazak sa JavaScripta na TypeScript
-2. Update Profila da bude jedan stranica sa formom sa svim profil poljima - urađeno
-3. Logger koristiti umjesto console.log
-4. Izdvojiti bilo kakve logike sa tokenom u posebne fajlove
-5. Napraviti logiku za sportove
+2. Napraviti da logika za sportove koristi filtriranje na backendu
+3. Istrazi zasto logika za katergorije radi fino van a ne radi fino unutra JSX sintakse
+4. Dodati logiku za update i delete sporta (na backendu odraditi soft delete)
+5. Dodati logiku za klubove
