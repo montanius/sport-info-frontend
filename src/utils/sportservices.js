@@ -6,7 +6,8 @@ const query = [];
 if (name) query.push(`name=${encodeURIComponent(name)}`);
 if (status) query.push(`status=${encodeURIComponent(status)}`);
 if (type) query.push(`type=${encodeURIComponent(type)}`);
-const queryFinal = query.length > 0 ? `?${query.join('&')}` : '';
+const queryFinalOld = query.length > 0 ? `?${query.join('&')}` : '';
+const queryFinal = new URLSearchParams({name, status, type});
     const response = await fetch(`http://localhost:4000/api/sports${queryFinal}`, {
 method: 'GET',
 headers: {
