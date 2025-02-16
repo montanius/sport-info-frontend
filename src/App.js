@@ -4,6 +4,8 @@ import ONama from './ONama';
 import Kontakt from "./Kontakt";
 import Novosti from'./Novosti';
 import Sportovi from './Sportovi';
+import Sport from './Sport';
+import UpdateSport from './UpdateSport';
 import Klubovi from './Klubovi';
 import Sportisti from './Sportisti';
 import Registracija from './Registracija';
@@ -33,6 +35,8 @@ function App()  {
 <Route path='profil' element={<Profil />} />
 <Route path='updateprofil' element={<UpdateProfil />} />
 <Route path='addSport' element={<AddSport />} />
+<Route path='sport/:id' element={<Sport />} />
+<Route path='updatesport/:id' element={<UpdateSport />} />
       </Routes>
                              </div>
   );
