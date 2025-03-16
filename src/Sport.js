@@ -17,6 +17,9 @@ endpoint: 'sports/sport',
 params: { _id: id },
 logerContext: 'Komponenta Sport',
 });
+
+console.log(data);
+
 setSportData(data);
 } catch (error) {
 loger.log(error.message);
@@ -61,11 +64,10 @@ return (
 
 <h2> Kategorije: </h2>
 <ul>
-{sportData.category.length > 0
+{sportData && sportData.category.length > 0
 ? sportData.category.map((category, index) => <li key={index}> {category} </li>)
 : 'Nema kategorija'}
 </ul>
-
 <Link to={'/sportovi'}>
 {' '}
 <button> Nazad na sportovi </button>

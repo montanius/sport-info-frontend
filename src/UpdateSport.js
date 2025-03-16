@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from "react";
-import { Link, useParams} from "react-router-dom";
+import { Link, useParams, useNavigate} from "react-router-dom";
 import { fetchData } from "./utils/fetchData";
 import loger from "./utils/loger";
 import { fetchUpdateSport, handleAddItem, handleEditItem, handleDeleteItem } from "./utils/sportservices";
 
 function UpdateSport ({sportData}) {
 const {id} = useParams();
-const [selectedSport, setSelectedSport] = useState({});
+const [selectedSport, setSelectedSport] = useState(null);
 const statusOptions = ["Olimpijski", "Paraolimpijski", "Neolimpijski"];
     const typeOptions = ["kolektivni", "individualni"];
 const [newDiscipline, setNewDiscipline] = useState("");
 const [newCategory, setNewCategory] = useState("");
+const navigate = useNavigate();
 
 useEffect(() => {
 const fetchSport = async () => {
@@ -30,7 +31,20 @@ loger.log(error.message);
 fetchSport();
 }, [id]);
 
-const handleAddDiscipline = () => handleAddItem(newDiscipline, setNewDiscipline, setSelectedSport, "discipline"); 
+const handleAddDiscipline = () => {
+    if(newDiscipline.trim()){
+const sport = addItemToArrayOfObj(selectedSport, newDiscipline, "discipline")
+        setSelectedSport(sport);
+        setNewDiscipline("");
+    }
+}
+
+const addItemToArrayOfObj = (prevObj, item, key) => {
+    const updatedObj = {};
+    updatedObj[key] = [...prevObj[key], item];
+    return {...prevObj, ...updatedObj};
+}
+
 const handleEditDiscipline = (index, newValue) => handleEditItem(index, newValue, setSelectedSport, "discipline");
  const handleDeleteDiscipline = (index) => handleDeleteItem(index, setSelectedSport, "discipline");
 
@@ -41,23 +55,26 @@ const handleEditDiscipline = (index, newValue) => handleEditItem(index, newValue
 const handleUpdateSport = async (e) => {
     e.preventDefault();
 await fetchUpdateSport(selectedSport, setSelectedSport, 'Podaci o sportu su uspješno izmijenjeni.');
+navigate(`/sport/${id}`);
 };  
 
 return(
     <>
 <h1> Izmjena podataka o sportu  </h1>
+{selectedSport && <>
 <form onSubmit={handleUpdateSport}>
 
 <h2> Ime sporta  </h2>
 
-<label htmlFor='name'> Ime sporta </label>
+    <label htmlFor='name'> Ime sporta </label>
 <input type='text' name='name' id='name' value={selectedSport.name} onChange={(e => setSelectedSport({...selectedSport, name: e.target.value}))} placeholder='Unesite novo ime sporta' />
+
 
 <h2> Status sporta </h2>
 
 <label htmlFor='status'> Status sporta </label>
 <select name='status' id='status' value={selectedSport.status} onChange={(e) => setSelectedSport({...selectedSport, status: e.target.value})} >
-{Array.isArray(statusOptions) && statusOptions.map((opcija) => (
+{statusOptions.map((opcija) => (
     <option key={opcija} value={opcija}> {opcija} </option>
 ))}
 </select>
@@ -66,7 +83,7 @@ return(
 
 <label htmlFor='type'> Vrsta sporta  </label>
 <select name='type' id='type' value={selectedSport.type} onChange={(e) => setSelectedSport({...selectedSport, type: e.target.value})}>
-{Array.isArray(typeOptions) && typeOptions.map((opcija) => (
+{typeOptions.map((opcija) => (
     <option key={opcija} value={opcija}> {opcija} </option>
 ))}
 </select>
@@ -82,7 +99,7 @@ return(
     </tr>
 </thead>
 <tbody>
-{Array.isArray(selectedSport.discipline) && selectedSport.discipline.length > 0 ?
+{selectedSport &&  selectedSport.discipline.length > 0 ?
 selectedSport.discipline.map((disciplina, index) => (
     <tr key={index}>
         <td>
@@ -116,7 +133,7 @@ selectedSport.discipline.map((disciplina, index) => (
     </tr>
 </thead>
 <tbody>
-{Array.isArray(selectedSport.category) && selectedSport.category.map((category, index) => (
+{selectedSport &&  selectedSport.category.map((category, index) => (
     <tr key={index}>
         <td>
             <input type='text' value={category} onChange={(e) => handleEditCategory(index, e.target.value)} placeholder='Unesite novo ime kategorije' />
@@ -136,6 +153,7 @@ selectedSport.discipline.map((disciplina, index) => (
 
 <button type='submit'> Ažuriraj podatke  </button>
 </form>
+</>}
 <Link to={`/sport/${id}`}> Povratak na detalje sporta </Link>
     </>
 );
