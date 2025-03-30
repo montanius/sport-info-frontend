@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { fetchData } from './utils/fetchData';
-import { fetchDeleteSport } from './utils/sportservices';
+import {fetchDeleteSport } from './utils/sport.data.services';
 import loger from './utils/loger';
 
 function Sport() {
@@ -32,12 +32,12 @@ const handleDeleteSport = async (e) => {
 e.preventDefault();
 const isConfirmed = window.confirm(`Da li želite da izbrišete sport?`);
 if (isConfirmed) {
-const deletedSport = { ...sportData, isDeleted: true };
-await fetchDeleteSport(
-deletedSport,
-setSportData,
-'Sport je uspješno izbrisan.'
-);
+const id = sportData._id;
+console.log("ID sporta je: ", id);
+const deletedSport = await fetchDeleteSport(id);
+if(deletedSport){
+alert("Sport je uspješno izbrisan.");
+}
 navigate('/sportovi');
 } else {
 loger.log(`Brisanje je otkazano.`);
