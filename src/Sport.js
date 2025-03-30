@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { fetchData } from './utils/fetchData';
-import { fetchUpdateSport } from './utils/sportservices';
+import { fetchDeleteSport } from './utils/sportservices';
 import loger from './utils/loger';
 
 function Sport() {
@@ -33,7 +33,7 @@ e.preventDefault();
 const isConfirmed = window.confirm(`Da li želite da izbrišete sport?`);
 if (isConfirmed) {
 const deletedSport = { ...sportData, isDeleted: true };
-await fetchUpdateSport(
+await fetchDeleteSport(
 deletedSport,
 setSportData,
 'Sport je uspješno izbrisan.'

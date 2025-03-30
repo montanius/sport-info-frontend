@@ -73,3 +73,24 @@ alert(message);
             loger.log(`Greška pri izmjeni podataka ${error}`);
                 }
     }
+
+    export const fetchDeleteSport = async (selectedSport, setSelectedSport, message) => {
+        try{
+   const response = await fetch(`http://localhost:4000/api/sports/${selectedSport._id}`, {
+        method : 'DELETE',
+        headers : {
+            "Content-Type" : "application/json", 
+        },  
+            body : JSON.stringify(selectedSport),
+        });
+             if(!response.ok){
+    throw new Error(`Greška: ${response.statusText}`)
+        }
+             const updatedData = await response.json();
+        await setSelectedSport(updatedData);
+alert(message);
+        }
+        catch(error){
+    loger.log(`Greška pri izmjeni podataka ${error}`);
+        }
+}
