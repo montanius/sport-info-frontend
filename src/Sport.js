@@ -33,7 +33,6 @@ e.preventDefault();
 const isConfirmed = window.confirm(`Da li želite da izbrišete sport?`);
 if (isConfirmed) {
 const id = sportData._id;
-console.log("ID sporta je: ", id);
 const deletedSport = await fetchDeleteSport(id);
 if(deletedSport){
 alert("Sport je uspješno izbrisan.");

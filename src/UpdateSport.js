@@ -2,8 +2,8 @@ import React, {useEffect, useState} from "react";
 import { Link, useParams, useNavigate} from "react-router-dom";
 import { fetchData } from "./utils/fetchData";
 import loger from "./utils/loger";
-import { fetchUpdateSport, handleAddItem, handleEditItem, handleDeleteItem } from "./utils/sportservices";
-
+import { fetchUpdateSport, addItemToArrayOfObj, editItemToArrayOfObj, deleteItemToArrayOfObj } from "./utils/sport.data.services";
+ 
 function UpdateSport ({sportData}) {
 const {id} = useParams();
 const [selectedSport, setSelectedSport] = useState(null);
@@ -27,34 +27,30 @@ catch(error){
 loger.log(error.message);
 }
 };
-
 fetchSport();
 }, [id]);
 
 const handleAddDiscipline = () => {
-    if(newDiscipline.trim()){
-const sport = addItemToArrayOfObj(selectedSport, newDiscipline, "discipline")
-        setSelectedSport(sport);
-        setNewDiscipline("");
+    const disciplina = newDiscipline.trim();
+    if(!disciplina) return;
+if(!selectedSport.discipline.includes(disciplina)){
+        setSelectedSport(prev => addItemToArrayOfObj(prev, disciplina, "discipline"));
     }
-}
+        setNewDiscipline("");
+    };
 
-const addItemToArrayOfObj = (prevObj, item, key) => {
-    const updatedObj = {};
-    updatedObj[key] = [...prevObj[key], item];
-    return {...prevObj, ...updatedObj};
-}
+    const handleAddCategory = () => {
+        const category = newCategory.trim();
+        if(!category) return;
+    if(!selectedSport.category.includes(category)){
+            setSelectedSport(prev => addItemToArrayOfObj(prev, category, "category"));
+        }
+            setNewCategory("");
+        };
 
-const handleEditDiscipline = (index, newValue) => handleEditItem(index, newValue, setSelectedSport, "discipline");
- const handleDeleteDiscipline = (index) => handleDeleteItem(index, setSelectedSport, "discipline");
-
- const handleAddCategory = () => handleAddItem(newCategory, setNewCategory, setSelectedSport, "category"); 
- const handleEditCategory = (index, newValue) => handleEditItem(index, newValue, setSelectedSport, "category");
-  const handleDeleteCategory = (index) => handleDeleteItem(index, setSelectedSport, "category");
-
-const handleUpdateSport = async (e) => {
+  const handleUpdateSport = async (e) => {
     e.preventDefault();
-await fetchUpdateSport(selectedSport, setSelectedSport, 'Podaci o sportu su uspješno izmijenjeni.');
+await fetchUpdateSport(id, selectedSport);
 navigate(`/sport/${id}`);
 };  
 
@@ -103,10 +99,10 @@ return(
 selectedSport.discipline.map((disciplina, index) => (
     <tr key={index}>
         <td>
-            <input type='text' value={disciplina} onChange={(e) => handleEditDiscipline(index, e.target.value)} placeholder='Unesite novo ime discipline' />
+            <input type='text' value={disciplina} onChange={(e) => editItemToArrayOfObj(setSelectedSport, "discipline", index, e.target.value)} placeholder='Unesite novo ime discipline' />
   </td>
               <td>
-              <button type='button' onClick={() =>  handleDeleteDiscipline(index)}> Izbriši disciplinu </button>
+              <button type='button' onClick={() =>  deleteItemToArrayOfObj(setSelectedSport, "discipline", index)}> Izbriši disciplinu </button>
         </td>
     </tr>
     ))
@@ -120,7 +116,7 @@ selectedSport.discipline.map((disciplina, index) => (
 <h3> Dodavanje discipline </h3>
 <label htmlFor='addDiscipline'> Nova disciplina </label>
 <input type='text' id='addDiscipline' value={newDiscipline} onChange={(e) => setNewDiscipline(e.target.value)} />
-<button type='button' onClick={handleAddDiscipline}> Dodaj disciplinu </button>
+<button type='button' onClick={ handleAddDiscipline}> Dodaj disciplinu </button>
 
 <h2> Kategorije </h2>
 <h3> Izmjena kategorija </h3>
@@ -136,10 +132,10 @@ selectedSport.discipline.map((disciplina, index) => (
 {selectedSport &&  selectedSport.category.map((category, index) => (
     <tr key={index}>
         <td>
-            <input type='text' value={category} onChange={(e) => handleEditCategory(index, e.target.value)} placeholder='Unesite novo ime kategorije' />
+            <input type='text' value={category} onChange={(e) => editItemToArrayOfObj(setSelectedSport, "category", index, e.target.value)} placeholder='Unesite novo ime kategorije' />
   </td>
               <td>
-              <button type='button' onClick={() =>  handleDeleteCategory(index)}> Izbriši kategoriju </button>
+              <button type='button' onClick={() =>  deleteItemToArrayOfObj(setSelectedSport, "category", index)}> Izbriši kategoriju </button>
         </td>
     </tr>
 ))}
