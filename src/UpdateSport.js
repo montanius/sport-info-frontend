@@ -34,6 +34,7 @@ const handleAddDiscipline = () => {
     const disciplina = newDiscipline.trim();
     if(!disciplina) return;
 if(!selectedSport.discipline.includes(disciplina)){
+    
             setSelectedSport(previusSportState => {
                 const curentSportState = {
                     ...previusSportState, 
@@ -43,6 +44,7 @@ return curentSportState;
                             });
                            
         setNewDiscipline("");
+                        }
     };
 
     const handleAddCategory = () => {
@@ -159,7 +161,6 @@ selectedSport.discipline.map((disciplina, index) => (
 <Link to={`/sport/${id}`}> Povratak na detalje sporta </Link>
     </>
 );
-}
 }
 
 export default UpdateSport;
