@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { Link, useParams, useNavigate} from "react-router-dom";
 import { fetchData } from "./utils/fetchData";
 import loger from "./utils/loger";
-import { fetchUpdateSport, addItemToArrayOfObj, editItemToArrayOfObj, deleteItemToArrayOfObj } from "./utils/sport.data.services";
+import { fetchUpdateSport} from "./utils/sport.data.services";
  
 function UpdateSport ({sportData}) {
 const {id} = useParams();
@@ -34,27 +34,71 @@ const handleAddDiscipline = () => {
     const disciplina = newDiscipline.trim();
     if(!disciplina) return;
 if(!selectedSport.discipline.includes(disciplina)){
-    
-            setSelectedSport(previusSportState => {
+                setSelectedSport(previusSportState => {
                 const curentSportState = {
                     ...previusSportState, 
                     discipline : [...previusSportState.discipline, disciplina] 
                 };
 return curentSportState;
                             });
-                           
-        setNewDiscipline("");
+                                   setNewDiscipline("");
                         }
     };
+
+    const handleEditDiscipline =  (index, newValue) => {
+       setSelectedSport(previusSportState => {
+                                                const updatedDiscipline = [...previusSportState.discipline];
+                        updatedDiscipline[index] = newValue;
+                           return{
+                ...previusSportState, 
+                discipline : updatedDiscipline
+            };
+            });
+    };
+
+const handleDeleteDiscipline = (index) => {
+    setSelectedSport(previusSportState => {
+const updatedDiscipline = previusSportState.discipline.filter((_, i) => i !== index);
+return{
+    ...previusSportState, 
+    discipline : updatedDiscipline
+};
+    });
+};
 
     const handleAddCategory = () => {
         const category = newCategory.trim();
         if(!category) return;
-    if(!selectedSport.category.includes(category)){
-            setSelectedSport(prev => addItemToArrayOfObj(prev, category, "category"));
+        if(!selectedSport.category.includes(category)){
+setSelectedSport(previusSportState => {
+const curentSportState = {
+    ...previusSportState, 
+    category : [...previusSportState.category, category]
+};
+return curentSportState;
+});
+setNewCategory("");  
         }
-            setNewCategory("");
-        };
+                };
+
+const handleEditCategory = (index, newValue) => {
+    setSelectedSport(previusSportState => {
+        const updatedCategory = [...previusSportState.category];
+updatedCategory[index] = newValue;
+return{
+    ...previusSportState, 
+    category : updatedCategory};
+    });
+};
+
+const handleDeleteCategory = (index) => {
+    setSelectedSport(previusSportState => {
+const updatedCategory = previusSportState.category.filter((_, i) => i !== index);
+return{
+    ...previusSportState, 
+    category : updatedCategory
+};});
+};
 
   const handleUpdateSport = async (e) => {
     e.preventDefault();
@@ -107,10 +151,10 @@ return(
 selectedSport.discipline.map((disciplina, index) => (
     <tr key={index}>
         <td>
-            <input type='text' value={disciplina} onChange={(e) => editItemToArrayOfObj(setSelectedSport, "discipline", index, e.target.value)} placeholder='Unesite novo ime discipline' />
+            <input type='text' value={disciplina} onChange={(e) => handleEditDiscipline(index, e.target.value)} placeholder='Unesite novo ime discipline' />
   </td>
               <td>
-              <button type='button' onClick={() =>  deleteItemToArrayOfObj(setSelectedSport, "discipline", index)}> Izbriši disciplinu </button>
+              <button type='button'  onClick={() =>  handleDeleteDiscipline(index) }> Izbriši disciplinu </button>
         </td>
     </tr>
     ))
@@ -137,16 +181,21 @@ selectedSport.discipline.map((disciplina, index) => (
     </tr>
 </thead>
 <tbody>
-{selectedSport &&  selectedSport.category.map((category, index) => (
+{selectedSport && selectedSport.category.length > 0 ? 
+selectedSport.category.map((category, index) => (
     <tr key={index}>
         <td>
-            <input type='text' value={category} onChange={(e) => editItemToArrayOfObj(setSelectedSport, "category", index, e.target.value)} placeholder='Unesite novo ime kategorije' />
+            <input type='text' value={category} onChange={(e) => handleEditCategory(index, e.target.value)} placeholder='Unesite novo ime kategorije' />
   </td>
               <td>
-              <button type='button' onClick={() =>  deleteItemToArrayOfObj(setSelectedSport, "category", index)}> Izbriši kategoriju </button>
+              <button type='button' onClick={() => handleDeleteCategory(index)} > Izbriši kategoriju </button>
         </td>
     </tr>
-))}
+))
+: <tr> 
+    <td colSpan='2'> Nema kategorija </td>
+</tr>
+}
 </tbody>
 </table>
 
